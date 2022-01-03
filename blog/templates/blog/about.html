@@ -1,5 +1,17 @@
 {% extends "blog/base.html" %}
 
 {% block content %}
-    <h1>About Page</h1>
+    <div class="col-md-16">
+          <div class="content-section">
+            <h3>{{ title }}</h3>
+            <p class='text-muted'>Terima kasih telah mengunjungi situs ini.
+              <ul class="list-group">
+                <li class="list-group-item list-group-item-light">{{ email}}</li>
+                <li class="list-group-item list-group-item-light">{{ telp }}</li>
+                <li class="list-group-item list-group-item-light"><a href="{{whatsapp}}">WhatsApp</a></li>
+                <li class="list-group-item list-group-item-light">{{ donate }}</li>
+              </ul>
+            </p>
+          </div>
+        </div>
 {% endblock content %}

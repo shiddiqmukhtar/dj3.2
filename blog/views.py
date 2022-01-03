@@ -1,4 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
+from django.contrib import messages
+from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import (
     ListView,
@@ -9,13 +11,19 @@ from django.views.generic import (
 )
 from .models import Post
 
-
+'''
 def home(request):
+    least_title = Post.objects.filter(title=title).latest('date_posted')
+    print(least_title)
+    
     context = {
-        'posts': Post.objects.all()
+        'post': Post.objects.all(),
+        
     }
+ 
     return render(request, 'blog/home.html', context)
 
+'''
 
 class PostListView(ListView):
     model = Post
@@ -24,6 +32,17 @@ class PostListView(ListView):
     ordering = ['-date_posted']
     paginate_by = 4
     
+    
+class UserPostListView(ListView):
+    model = Post
+    template_name = 'blog/user_posts.html'  # <app>/<model>_<viewtype>.html
+    context_object_name = 'posts'
+    ordering = ['-date_posted']
+    paginate_by = 4
+    
+    def get_queryset(self):
+        user = get_object_or_404(User, username=self.kwargs.get('username'))
+        return Post.objects.filter(author=user).order_by('-date_posted')
 
 
 class PostDetailView(DetailView):
@@ -65,5 +84,29 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return False
 
 
+
+    
+
+
 def about(request):
-    return render(request, 'blog/about.html', {'title': 'About'})
+    image = None
+    context = {
+        'title': 'About Me',
+        'donate': 'Donate to No. Rek. : 012-345-678-90',
+        'email': 'Email : kotar226a@gmail.com',
+        'telp' : 'Telp. : +62 85-342-132-849',
+        'whatsapp': 'https://chat.whatsapp.com/FQYvZpQOBFVB94HtZRQPJX',
+    }
+    return render(request, 'blog/about.html', context)
+
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
